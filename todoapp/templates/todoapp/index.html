@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Django TodoApp - Restapi</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="bg-dark">
+    <div class="container mt-5 d-flex justify-content-center">
+      <div class="card text-center" style="width: 50rem">
+        <div class="card-header">Django TodoApp - Restapi Application</div>
+        <div class="card-body">
+          <form action="" method="post">
+            {% csrf_token %}
+            <h5 class="card-title">Create Your Todos Here</h5>
+
+            {% if messages %}
+              {% for message in messages %}
+                {% if message.tags == "error" %}
+                  <div class="alert alert-danger alert-dismissible fade show">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                  </div>
+                {% else %}
+                  <div class="alert alert-success alert-dismissible fade show">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+
+            <div class="input-group mb-3">
+              <span class="input-group-text">Title</span>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Title of Todo"
+                name="title"
+                required
+              />
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text">Description</span>
+              <textarea
+                class="form-control"
+                name="description"
+                required
+              ></textarea>
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text">Status</span>
+              <select class="form-select" name="status" required>
+                <option selected>Choose your Status</option>
+                <option value="Complete">Complete</option>
+                <option value="Not complete">Not complete</option>
+              </select>
+            </div>
+
+            <button class="btn btn-primary mt-3" type="submit">Create Todo</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="container d-flex justify-content-center mt-5">
+      <div class="card text-center" style="width: 50rem">
+        <div class="card-header">Your Todos Here</div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% if todos %}
+                {% for todo in todos %}
+                  <tr>
+                    <td>{{ todo.title }}</td>
+                    <td>{{ todo.description }}</td>
+                    <td>{{ todo.status }}</td>
+
+                    <td>
+                      <a
+                        href="{% url 'todoapp:update' todo.id %}"
+                        class="btn btn-warning mb-2"
+                      >Update</a>
+                      <a href="{% url 'todoapp:delete_confirm' todo.id %}" class="btn btn-danger">
+                      Delete
+                      </a>
+
+                    </td>
+                  </tr>
+                {% endfor %}
+              {% else %}
+                <tr><td colspan="4">No todos found</td></tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
