@@ -114,9 +114,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-ALLOWED_HOSTS = [
-    'todo-restapi-django.onrender.com',
-    '.onrender.com',   # optional, allows any subdomain of Render
-    'localhost',       # for local testing
-    '127.0.0.1',
-]
+ALLOWED_HOSTS = ['todo-restapi-django.onrender.com', '127.0.0.1']
