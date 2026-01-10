@@ -11,7 +11,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "your-default-secret-key")
 DEBUG = False
 
 # Add your PythonAnywhere domain here
-ALLOWED_HOSTS = ['abinesh18.pythonanywhere.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
