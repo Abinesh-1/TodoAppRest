@@ -1,18 +1,22 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load .env file for local development
+load_dotenv()
 
 # Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY", "your-default-secret-key")
+SECRET_KEY = os.environ.get("SECRET_KEY", "your-default-secret-key-change-in-production")
 
 # Turn off debug in production
-DEBUG = False
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-# Add your PythonAnywhere domain here
+# Add your domain here
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
-CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",")
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",") if os.environ.get("CSRF_TRUSTED_ORIGINS") else []
 
 # Application definition
 INSTALLED_APPS = [
@@ -30,7 +34,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # for static files
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -38,8 +43,10 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-ROOT_URLCONF = "main.urls"
 
+CORS_ALLOW_ALL_ORIGINS = True
+
+ROOT_URLCONF = "main.urls"
 
 TEMPLATES = [
     {
@@ -57,9 +64,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "main.wsgi.application"  # replace with your project folder
+WSGI_APPLICATION = "main.wsgi.application"
 
-# Database (example: SQLite for free tier)
+# Database
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -67,7 +74,7 @@ DATABASES = {
     }
 }
 
-# Static files (CSS, JS, Images)
+# Static files
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
