@@ -1,35 +1,40 @@
 from django.shortcuts import render, redirect
-import requests
 from django.contrib import messages
+from todo.models import Todo  # Import your Todo model directly
 
 # Index page
 def index(request):
     if request.method == "POST":
-        data = request.POST
-        requests.post("http://127.0.0.1:8000/api/createtodo", data=data)
+        title = request.POST.get('title')
+        description = request.POST.get('description', '')
+        Todo.objects.create(title=title, description=description)
         messages.success(request, "Todo Created Successfully!")
-        return redirect("todoapp:index")  # updated to use namespace
+        return redirect("todoapp:index")
 
-    todos = requests.get("http://127.0.0.1:8000/api/showtodos").json()
-    return render(request, "todoapp/index.html", {"todos": todos})  # template path includes app folder
+    todos = Todo.objects.all().values()  # Get all todos as dictionaries
+    return render(request, "todoapp/index.html", {"todos": list(todos)})
 
 # Update page
 def update(request, id):
-    todo = requests.get(f"http://127.0.0.1:8000/api/getonetodo/{id}").json()
+    todo = Todo.objects.get(id=id)
+    
     if request.method == "POST":
-        requests.put(f"http://127.0.0.1:8000/api/updatetodo/{id}", data=request.POST)
+        todo.title = request.POST.get('title')
+        todo.description = request.POST.get('description', '')
+        todo.save()
         messages.success(request, "Todo Updated Successfully!")
-        return redirect("todoapp:index")  # updated to use namespace
+        return redirect("todoapp:index")
 
-    return render(request, "todoapp/update.html", {"todo": todo})  # template path includes app folder
+    return render(request, "todoapp/update.html", {"todo": todo})
 
 # Delete confirmation page
 def delete_confirm(request, id):
-    todo = requests.get(f"http://127.0.0.1:8000/api/getonetodo/{id}").json()
-    return render(request, "todoapp/delete_confirm.html", {"todo": todo})  # template path includes app folder
+    todo = Todo.objects.get(id=id)
+    return render(request, "todoapp/delete_confirm.html", {"todo": todo})
 
 # Actual delete
 def delete(request, id):
-    requests.delete(f"http://127.0.0.1:8000/api/deletetodo/{id}")
+    todo = Todo.objects.get(id=id)
+    todo.delete()
     messages.error(request, "Todo Deleted Successfully!")
-    return redirect("todoapp:index")  # updated to use namespace
+    return redirect("todoapp:index")
