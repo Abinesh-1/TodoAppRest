@@ -11,7 +11,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "your-default-secret-key")
 DEBUG = False
 
 # Add your PythonAnywhere domain here
-ALLOWED_HOSTS = ['abinesh18.pythonanywhere.com']
+ALLOWED_HOSTS = ['abinesh18.pythonanywhere.com', 'localhost', '127.0.0.1']
+
 
 
 # Application definition
@@ -22,7 +23,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Your apps
     "todo",
     "todoapp",
     "rest_framework",
@@ -39,8 +39,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+ROOT_URLCONF = "main.urls"
 
-ROOT_URLCONF = "TodoApp.urls"  # replace with your project folder containing urls.py
 
 TEMPLATES = [
     {
