@@ -13,8 +13,6 @@ DEBUG = False
 # Add your PythonAnywhere domain here
 ALLOWED_HOSTS = ['abinesh18.pythonanywhere.com', 'localhost', '127.0.0.1']
 
-
-
 # Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -58,7 +56,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "TodoApp.wsgi.application"  # replace with your project folder
+WSGI_APPLICATION = "main.wsgi.application"  # replace with your project folder
 
 # Database (example: SQLite for free tier)
 DATABASES = {
