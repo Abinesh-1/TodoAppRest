@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
 
 # Load .env file for local development
 load_dotenv()
@@ -67,13 +68,21 @@ TEMPLATES = [
 WSGI_APPLICATION = "main.wsgi.application"
 
 # Database
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if os.environ.get('DATABASE_URL'):
+    # Production: Use PostgreSQL from Render
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
     }
-}
-
+else:
+    # Local: Use SQLite
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+    
+    
 # Static files
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
